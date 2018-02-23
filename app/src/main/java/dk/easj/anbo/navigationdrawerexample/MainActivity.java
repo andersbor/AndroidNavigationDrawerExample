@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // The "burger" button opens the navigation drawer
+        // The "burger" buttons is placed in the ToolBar
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer,
                 toolbar, R.string.nav_open_drawer, R.string.nav_close_drawer);
@@ -34,13 +36,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Fragment fragment = new InboxFragment();
+        Fragment fragment = new InboxFragment(); // Starting Fragment
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.content_frame, fragment);
         ft.commit();
     }
 
     // Head First, 2nd, page 616
+    // Event handler for the menu items in the navitation drawer.
+    // Defined in the interface NavigationView.OnNavigationItemSelectedListener
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -65,12 +69,16 @@ public class MainActivity extends AppCompatActivity
             default:
                 fragment = new InboxFragment();
         }
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        // android:layout_gravity="start" in activity_main.xml
+
+        // Some actions change the Fragment
+        // other actions makes an intent and goes to another Activity
         if (fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment);
             ft.commit();
-            DrawerLayout drawer = findViewById(R.id.drawer_layout);
-            drawer.closeDrawer(GravityCompat.START);
         } else {
             startActivity(intent);
         }
@@ -78,6 +86,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     // Head First, 2nd, page 617
+    // override the back button behaviour to close the navigation drawer (if open)
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
